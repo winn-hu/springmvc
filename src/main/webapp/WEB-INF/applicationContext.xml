@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx https://www.springframework.org/schema/tx/spring-tx.xsd">
+
+  <context:component-scan base-package="com.blueStarWei.*" />
+
+  <bean id="viewResolver"
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/WEB-INF/jsp/" />
+    <property name="suffix" value=".jsp"/>
+  </bean>
+
+  <context:property-placeholder location="classpath:jdbc.properties" />
+
+  <bean id="datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+    <property name="driverClass" value="${jdbc.driver}" />
+    <property name="jdbcUrl" value="${jdbc.url}" />
+    <property name="user" value="${jdbc.username}" />
+    <property name="password" value="${jdbc.password}" />
+    <!-- 当连接池中的连接耗尽的时候c3p0一次同时获取的连接数 -->
+    <property name="acquireIncrement" value="${jdbc.pool.increment}"/>
+    <!-- 初始连接池大小 -->
+    <property name="initialPoolSize" value="${jdbc.pool.init}"/>
+    <!-- 连接池中连接最小个数 -->
+    <property name="minPoolSize" value="${jdbc.pool.min}"/>
+    <!-- 连接池中连接最大个数 -->
+    <property name="maxPoolSize" value="${jdbc.pool.max}"/>
+  </bean>
+
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="datasource"/>
+    <!--    指定*Mapper.xml位置-->
+    <property name="mapperLocations" value="classpath:mapper/*.xml" />
+  </bean>
+
+  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" >
+    <!--    直接接口（Java）路径-->
+    <property name="basePackage" value="com.blueStarWei.mapper" />
+    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+  </bean>
+
+  <!-- 声明式事务管理 : 定义事物管理器，由spring管理事务 -->
+  <tx:annotation-driven/>
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="datasource"/>
+  </bean>
+
+
+</beans>
