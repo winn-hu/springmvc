@@ -36,7 +36,11 @@
     <property name="dataSource" ref="datasource"/>
     <!--    指定*Mapper.xml位置-->
     <property name="mapperLocations" value="classpath:mapper/*.xml" />
-  </bean>
+    <!--注册Mybatis插件-->
+    <property name="plugins"  >
+      <bean class="com.blueStarWei.interceptor.SqlInterceptor" />
+    </property>
+</bean>
 
   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" >
     <!--    直接接口（Java）路径-->

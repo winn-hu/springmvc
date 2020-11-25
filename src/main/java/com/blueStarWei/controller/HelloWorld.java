@@ -13,7 +13,7 @@ public class HelloWorld {
     @Autowired
     private PersonMapper person;
 
-    @RequestMapping("/name/{id}")
+    @RequestMapping("/id/{id}")
     public String say(@PathVariable int id){
         return person.getName(id);
     }
