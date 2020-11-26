@@ -10,7 +10,7 @@
   select name from person where id = #{id}
 </select>
 
-<select id="getPersonById" parameterType="int" resultType="com.blueStarWei.bean.Person" >
-  select * from person where id = #{id}
+<select id="getPerson" resultType="com.blueStarWei.bean.Person" >
+  select * from person where name = #{name} and age = #{age}
 </select>
 </mapper>

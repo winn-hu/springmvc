@@ -1,17 +1,23 @@
 package com.blueStarWei.interceptor;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.type.TypeHandlerRegistry;
 
-import java.sql.Statement;
+import java.util.List;
 
 /**
  * MyBatis 允许使用插件来拦截的方法调用包括：
@@ -25,34 +31,57 @@ import java.sql.Statement;
  *
  */
 @Intercepts({
-        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class,Object.class, RowBounds.class, ResultHandler.class}),
-        @Signature(type = StatementHandler.class, method = "query", args = {Statement.class,ResultHandler.class})
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class,Object.class, RowBounds.class, ResultHandler.class})
 })
 public class SqlInterceptor implements Interceptor {
 
     public Object intercept(Invocation invocation) throws Throwable {
-        System.out.println("------------------------bengin query-----------");
-        Object target = invocation.getTarget();
-        if(target instanceof StatementHandler) {
-            StatementHandler handler = (StatementHandler) target;
-            String sql = handler.getBoundSql().getSql();
-            Object param = handler.getParameterHandler().getParameterObject();
+        Object result;
 
-            System.out.println("sql : "+sql.replace("?",param+""));
-        }else if(target instanceof  Executor){
-            Object[] args = invocation.getArgs();
-            MappedStatement mappedStatement  = (MappedStatement) args[0];
-            String methodName = mappedStatement.getId();
-            System.out.println("method : "+methodName);
+        Object[] args = invocation.getArgs();
+        MappedStatement mappedStatement  = (MappedStatement) args[0];
+        String methodName = mappedStatement.getId();
+        String sql = showSql(mappedStatement.getConfiguration(), mappedStatement.getBoundSql(args[1]));
 
-            BoundSql boundSql = mappedStatement.getBoundSql(args[1]);
-            String sql = boundSql.getSql();
-            Object param = boundSql.getParameterObject();
-            System.out.println("sql : "+sql.replace("?",param+""));
+        CacheManager cacheManager = CacheManager.getInstance();
+        //get cache from ehcache.xml.
+        Cache cache = cacheManager.getCache("sql");
+        int cacheKey = (methodName + sql).hashCode();
+        Element element = cache.get(cacheKey);
+        if(element != null) {
+            result = element.getObjectValue();
+            System.out.println("From cache....");
+        }else {
+            result = invocation.proceed();
+            cache.put(new Element(cacheKey,result));
         }
-        Object result = invocation.proceed();
-        System.out.println("result : "+result);
-        System.out.println("------------------------bengin end-----------");
+
         return result;
+    }
+
+    private String showSql(Configuration config, BoundSql boundSql) {
+        String sql = boundSql.getSql();
+
+        Object paramObj = boundSql.getParameterObject();
+        List<ParameterMapping> paramMappings = boundSql.getParameterMappings();
+        if (paramObj != null && paramMappings.size() > 0) {
+            TypeHandlerRegistry typeHandlerRegistry = config.getTypeHandlerRegistry();
+            if (typeHandlerRegistry.hasTypeHandler(paramObj.getClass())) {
+                sql = sql.replaceFirst("\\?", paramObj.toString());
+            } else {
+                MetaObject metaObject = config.newMetaObject(paramObj);
+                for (ParameterMapping parameterMapping : paramMappings) {
+                    String key = parameterMapping.getProperty();
+                    if (metaObject.hasGetter(key)) {
+                        Object value = metaObject.getValue(key);
+                        sql = sql.replaceFirst("\\?", value.toString());
+                    } else if (boundSql.hasAdditionalParameter(key)) {
+                        Object value = boundSql.getAdditionalParameter(key);
+                        sql = sql.replaceFirst("\\?", value.toString());
+                    }
+                }
+            }
+        }
+        return sql;
     }
 }

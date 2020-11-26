@@ -54,5 +54,6 @@
     <property name="dataSource" ref="datasource"/>
   </bean>
 
+  <import resource="applicationContext-cache.xml" />
 
 </beans>

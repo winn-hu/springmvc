@@ -48,6 +48,20 @@
       <artifactId>pagehelper</artifactId>
       <version>4.0.1</version>
     </dependency>
+
+    <!--提供spring支持-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-support</artifactId>
+      <version>4.3.5.RELEASE</version>
+    </dependency>
+    <!-- ehcache-->
+    <dependency>
+      <groupId>net.sf.ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>2.10.3</version>
+    </dependency>
+
   </dependencies>
 
 </project>
