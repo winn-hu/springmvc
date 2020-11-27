@@ -28,6 +28,6 @@ public class HelloWorld {
         params.put("name",name);
         params.put("age", age);
         Person person = this.mapper.getPerson(params);
-        return person.toString();
+        return person != null ? person.toString() : "No Result";
     }
 }

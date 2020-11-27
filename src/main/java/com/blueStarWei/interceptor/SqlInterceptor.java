@@ -4,6 +4,7 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
@@ -50,7 +51,8 @@ public class SqlInterceptor implements Interceptor {
         Element element = cache.get(cacheKey);
         if(element != null) {
             result = element.getObjectValue();
-            System.out.println("From cache....");
+            System.out.println("From cache --    sql :"+sql);
+            System.out.println("From cache -- result :"+result);
         }else {
             result = invocation.proceed();
             cache.put(new Element(cacheKey,result));
