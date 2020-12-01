@@ -1,5 +1,7 @@
 package com.blueStarWei.interceptor;
 
+import com.blueStarWei.utils.MyBatisLogUtil;
+import com.blueStarWei.utils.StringUtil;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -36,6 +38,8 @@ import java.util.List;
 })
 public class SqlInterceptor implements Interceptor {
 
+    private static final Log LOG = MyBatisLogUtil.getLog(SqlInterceptor.class);
+
     public Object intercept(Invocation invocation) throws Throwable {
         Object result;
 
@@ -51,8 +55,8 @@ public class SqlInterceptor implements Interceptor {
         Element element = cache.get(cacheKey);
         if(element != null) {
             result = element.getObjectValue();
-            System.out.println("From cache --    sql :"+sql);
-            System.out.println("From cache -- result :"+result);
+            LOG.debug("From cache --    sql :"+ StringUtil.removeExtraWhitespaces(sql));
+            LOG.debug("From cache -- result :"+result);
         }else {
             result = invocation.proceed();
             cache.put(new Element(cacheKey,result));
