@@ -11,6 +11,8 @@
 </select>
 
 <select id="getPerson" resultType="com.blueStarWei.bean.Person" >
-  select * from person where name = #{name} and age = #{age}
+  select * from person
+   where name = #{name}
+     and age = #{age}
 </select>
 </mapper>
