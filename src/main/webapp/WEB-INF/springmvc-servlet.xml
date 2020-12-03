@@ -15,4 +15,12 @@
 
     <mvc:annotation-driven/>
 
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/login"/>
+            <bean class="com.blueStarWei.interceptor.RequestUrlInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
 </beans>
