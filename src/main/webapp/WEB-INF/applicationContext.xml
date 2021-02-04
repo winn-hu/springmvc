@@ -16,6 +16,7 @@
 
   <import resource="applicationContext-mybatis.xml" />
   <import resource="applicationContext-cache.xml" />
+  <import resource="applicationContext-task.xml" />
 
   <!-- 声明式事务管理 : 定义事物管理器，由spring管理事务 -->
   <tx:annotation-driven/>
