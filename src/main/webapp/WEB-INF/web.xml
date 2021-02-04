@@ -45,5 +45,10 @@
     <servlet-name>springmvc</servlet-name>
   </filter-mapping>
 
+  <!--定时任务监听器 -->
+  <listener>
+    <listener-class>com.blueStarWei.task.TaskListen</listener-class>
+  </listener>
+
 </web-app>
         
