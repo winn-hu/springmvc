@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class RequestUrlInterceptor implements HandlerInterceptor {
 
-    private static final Log LOG = MyBatisLogUtil.getLog(SqlInterceptor.class);
+    private static final Log LOG = MyBatisLogUtil.getLog(RequestUrlInterceptor.class);
 
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         LOG.debug("RequestUrlInterceptor ==>  You can do auth control there.");

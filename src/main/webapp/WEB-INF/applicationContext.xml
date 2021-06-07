@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-                           http://www.springframework.org/schema/tx https://www.springframework.org/schema/tx/spring-tx.xsd">
+                           http://www.springframework.org/schema/tx https://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/tx ">
 
   <!--无需扫描Controller相关注解，它们将会单独由springmvc-servlet.xml中扫描-->
-  <context:component-scan base-package="com.blueStarWei" >
+  <context:component-scan base-package="com.blueStarWei">
     <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
     <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
   </context:component-scan>
 
-  <import resource="applicationContext-mybatis.xml" />
-  <import resource="applicationContext-cache.xml" />
-  <import resource="applicationContext-task.xml" />
+  <import resource="applicationContext-mybatis.xml"/>
+  <import resource="applicationContext-cache.xml"/>
+  <import resource="applicationContext-task.xml"/>
 
   <!-- 声明式事务管理 : 定义事物管理器，由spring管理事务 -->
   <tx:annotation-driven/>
@@ -25,13 +27,9 @@
   </bean>
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <property name="prefix" value="/WEB-INF/jsp/" />
+    <property name="prefix" value="/WEB-INF/jsp/"/>
     <property name="suffix" value=".jsp"/>
   </bean>
-
-
-
-
 
 
 </beans>
