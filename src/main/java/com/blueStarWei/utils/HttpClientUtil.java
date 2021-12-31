@@ -1,6 +1,8 @@
 package com.blueStarWei.utils;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -126,5 +128,36 @@ public class HttpClientUtil {
         StringBuilder params = new StringBuilder();
         parameters.forEach((key,value) -> params.append("&").append(key).append("=").append(value));
         return params.substring(1);
+    }
+
+
+    /**
+     * <dependency>
+     *   <groupId>org.apache.httpcomponents</groupId>
+     *   <artifactId>httpclient</artifactId>
+     *   <version>4.5.1</version>
+     * </dependency>
+     * <dependency>
+     *   <groupId>org.apache.httpcomponents</groupId>
+     *   <artifactId>fluent-hc</artifactId>
+     *   <version>4.5.1</version>
+     * </dependency>
+     * @param url
+     * @param params
+     * @return
+     * @throws IOException
+     */
+    public static String fluentPost(String url,String params) throws IOException {
+        String result = "";
+        Request request = Request.Post(url);
+        request.bodyString(params, ContentType.APPLICATION_JSON);
+        request.setHeader("User-Agent", "Apipost client Runtime/+https://www.apipost.cn/");
+        request.setHeader("Content-Type", "application/json");
+        HttpResponse httpResponse = request.execute().returnResponse();
+        System.out.println(httpResponse.getStatusLine());
+        if (httpResponse.getEntity() != null) {
+            result = EntityUtils.toString(httpResponse.getEntity());
+        }
+        return result;
     }
 }
