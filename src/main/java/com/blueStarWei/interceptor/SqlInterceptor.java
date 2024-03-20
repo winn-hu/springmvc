@@ -24,17 +24,16 @@ import java.util.List;
 
 /**
  * MyBatis 允许使用插件来拦截的方法调用包括：
- *     Executor (update, query, flushStatements, commit, rollback, getTransaction, close, isClosed)
- *     ParameterHandler (getParameterObject, setParameters)
- *     ResultSetHandler (handleResultSets, handleOutputParameters)
- *     StatementHandler (prepare, parameterize, batch, update, query)
- *
- *  拦截器顺序：
- *       Executor -> ParameterHandler -> StatementHandler -> ResultSetHandler
- *
+ * Executor (update, query, flushStatements, commit, rollback, getTransaction, close, isClosed)
+ * ParameterHandler (getParameterObject, setParameters)
+ * ResultSetHandler (handleResultSets, handleOutputParameters)
+ * StatementHandler (prepare, parameterize, batch, update, query)
+ * <p>
+ * 拦截器顺序：
+ * Executor -> ParameterHandler -> StatementHandler -> ResultSetHandler
  */
 @Intercepts({
-        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class,Object.class, RowBounds.class, ResultHandler.class})
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})
 })
 public class SqlInterceptor implements Interceptor {
 
@@ -44,7 +43,7 @@ public class SqlInterceptor implements Interceptor {
         Object result;
 
         Object[] args = invocation.getArgs();
-        MappedStatement mappedStatement  = (MappedStatement) args[0];
+        MappedStatement mappedStatement = (MappedStatement) args[0];
         String methodName = mappedStatement.getId();
         String sql = showSql(mappedStatement.getConfiguration(), mappedStatement.getBoundSql(args[1]));
 
@@ -53,13 +52,13 @@ public class SqlInterceptor implements Interceptor {
         Cache cache = cacheManager.getCache("sql");
         int cacheKey = (methodName + sql).hashCode();
         Element element = cache.get(cacheKey);
-        if(element != null) {
+        if (element != null) {
             result = element.getObjectValue();
-            LOG.debug("From cache --    sql :"+ StringUtil.removeExtraWhitespaces(sql));
-            LOG.debug("From cache -- result :"+result);
-        }else {
+            LOG.debug("From cache --    sql :" + StringUtil.removeExtraWhitespaces(sql));
+            LOG.debug("From cache -- result :" + result);
+        } else {
             result = invocation.proceed();
-            cache.put(new Element(cacheKey,result));
+            cache.put(new Element(cacheKey, result));
         }
 
         return result;

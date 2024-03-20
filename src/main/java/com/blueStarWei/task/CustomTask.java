@@ -1,6 +1,5 @@
 package com.blueStarWei.task;
 
-import com.blueStarWei.utils.HttpClientUtil;
 import com.blueStarWei.utils.MyBatisLogUtil;
 import org.apache.ibatis.logging.Log;
 

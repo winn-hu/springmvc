@@ -22,13 +22,13 @@ import java.util.Random;
 
 public class HttpClientUtil {
 
-    public static String post(String url, Map<String,Object> parameters) {
+    public static String post(String url, Map<String, Object> parameters) {
         String result = "";
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost post = new HttpPost(url);
         CloseableHttpResponse response = null;
         try {
-            if(parameters != null) {
+            if (parameters != null) {
                 StringEntity requestEntity = new StringEntity(JsonUtil.map2json(parameters), ContentType.APPLICATION_JSON);
                 requestEntity.setContentType("application/json;charset=UTF-8");
                 post.setEntity(requestEntity);
@@ -59,7 +59,7 @@ public class HttpClientUtil {
         return result;
     }
 
-    public static String post4randomIP(String url, Map<String,Object> paramters) {
+    public static String post4randomIP(String url, Map<String, Object> paramters) {
         PrintWriter out = null;
         BufferedReader in = null;
         String result = "";
@@ -124,30 +124,31 @@ public class HttpClientUtil {
                 (random.nextInt(255) + 1);
     }
 
-    public static String map2RequestParams(Map<String,Object> parameters) {
+    public static String map2RequestParams(Map<String, Object> parameters) {
         StringBuilder params = new StringBuilder();
-        parameters.forEach((key,value) -> params.append("&").append(key).append("=").append(value));
+        parameters.forEach((key, value) -> params.append("&").append(key).append("=").append(value));
         return params.substring(1);
     }
 
 
     /**
      * <dependency>
-     *   <groupId>org.apache.httpcomponents</groupId>
-     *   <artifactId>httpclient</artifactId>
-     *   <version>4.5.1</version>
+     * <groupId>org.apache.httpcomponents</groupId>
+     * <artifactId>httpclient</artifactId>
+     * <version>4.5.1</version>
      * </dependency>
      * <dependency>
-     *   <groupId>org.apache.httpcomponents</groupId>
-     *   <artifactId>fluent-hc</artifactId>
-     *   <version>4.5.1</version>
+     * <groupId>org.apache.httpcomponents</groupId>
+     * <artifactId>fluent-hc</artifactId>
+     * <version>4.5.1</version>
      * </dependency>
+     *
      * @param url
      * @param params
      * @return
      * @throws IOException
      */
-    public static String fluentPost(String url,String params) throws IOException {
+    public static String fluentPost(String url, String params) throws IOException {
         String result = "";
         Request request = Request.Post(url);
         request.bodyString(params, ContentType.APPLICATION_JSON);

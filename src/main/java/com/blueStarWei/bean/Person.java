@@ -9,7 +9,8 @@ public class Person implements Serializable {
     private int age;
     private String address;
 
-    public Person() {}
+    public Person() {
+    }
 
     public Person(int id, String name, int age, String address) {
         this.id = id;
@@ -52,7 +53,7 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +

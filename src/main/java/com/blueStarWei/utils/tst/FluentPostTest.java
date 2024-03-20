@@ -13,9 +13,7 @@ public class FluentPostTest {
         String body = "{\"name\":\"Winn\",\"age\":22,\"id\":1}";
         String result = HttpClientUtil.fluentPost(url, body);
         Map map = JsonUtil.json2map(result);
-        map.forEach((key,value) -> {
-            System.out.println(key+" : "+value);
-        });
+        map.forEach((key, value) -> System.out.println(key + " : " + value));
 
     }
 }

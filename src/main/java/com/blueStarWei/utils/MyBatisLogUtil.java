@@ -12,6 +12,7 @@ public class MyBatisLogUtil {
 
     /**
      * 获取MyBatis的Log实例
+     *
      * @param clazz 实用类的class
      * @return MyBatis的Log实例
      */

@@ -4,7 +4,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.util.Timer;
 
-public class TaskListen  implements ServletContextListener {
+public class TaskListen implements ServletContextListener {
 
     Timer timer = null;
 

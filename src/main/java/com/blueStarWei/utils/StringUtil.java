@@ -9,7 +9,7 @@ public class StringUtil {
         StringBuilder builder = new StringBuilder();
         boolean hasMoreTokens = tokenizer.hasMoreTokens();
 
-        while(hasMoreTokens) {
+        while (hasMoreTokens) {
             builder.append(tokenizer.nextToken());
             hasMoreTokens = tokenizer.hasMoreTokens();
             if (hasMoreTokens) {

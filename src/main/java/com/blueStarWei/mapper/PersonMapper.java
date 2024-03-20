@@ -10,5 +10,5 @@ public interface PersonMapper {
 
     String getName(int id);
 
-    Person getPerson(Map<String,Object> params);
+    Person getPerson(Map<String, Object> params);
 }

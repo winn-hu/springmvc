@@ -12,6 +12,6 @@ public class MyTask extends TimerTask {
 
     @Override
     public void run() {
-        LOG.debug("MyTask ==> "+ LocalTime.now());
+        //LOG.debug("MyTask ==> "+ LocalTime.now());
     }
 }
